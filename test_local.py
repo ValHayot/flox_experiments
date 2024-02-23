@@ -8,6 +8,9 @@ from parsl.providers import SlurmProvider, LocalProvider
 from parsl.executors import HighThroughputExecutor
 from parsl import python_app
 
+from proxystore.store import register_store
+from proxystore.store import Store
+from proxystore_ex.connectors.dim.margo import MargoConnector
 
 @python_app
 def platform():
@@ -22,10 +25,11 @@ def priming():
 
     
 @python_app
-def sleeper(sleep_dur=0, input_data="", output_data_volume:int=1):
+def sleeper(store, sleep_dur=0, input_data="", output_data_volume:int=1):
     import time
     time.sleep(sleep_dur)
-    return b'0' * output_data_volume
+    output_str =  b'0' * output_data_volume * 10**6
+    return store.proxy(output_str)
 
 
 
@@ -34,8 +38,12 @@ def test_sequence(num_workers, task_count=1, sleep_dur=0, input_data=0, output_d
     prefix = f"[{num_workers=}][{task_count=}][{sleep_dur=}][{input_data=}][{output_data=}]"
 
     start = time.time()
+    connector = MargoConnector(port=5000, protocol='ofi+verbs')
+    store = Store('margo-store', connector)  
+    register_store(store) 
+    
     input_string = b'0' * input_data * 10**6
-    futures = [sleeper(0, input_string, output_data) for i in range(task_count)]
+    futures = [sleeper(0, store.proxy(input_string), output_data) for i in range(task_count)]
     launch_done = time.time() - start
     [future.result() for future in futures]
     exec_done = time.time() - start
