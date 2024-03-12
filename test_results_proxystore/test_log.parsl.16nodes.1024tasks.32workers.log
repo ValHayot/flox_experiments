@@ -1,0 +1,28 @@
+Starting test with workers=512
+Launched task.. waiting
+Traceback (most recent call last):
+  File "/home/vhayot/flox_experiments/test.py", line 118, in <module>
+    )
+    ^^
+  File "/home/vhayot/flox_experiments/test.py", line 26, in priming
+    print(f"Result : {future.result()}")
+                      ^^^^^^^^^^^^^^^
+  File "/home/vhayot/spack/var/spack/environments/mochi/.spack-env/._view/mqqgoppvczvz5n73nj3tj3aecze2kzdo/lib/python3.11/concurrent/futures/_base.py", line 456, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/vhayot/spack/var/spack/environments/mochi/.spack-env/._view/mqqgoppvczvz5n73nj3tj3aecze2kzdo/lib/python3.11/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/home/vhayot/spack/var/spack/environments/mochi/.spack-env/view/lib/python3.11/site-packages/parsl/dataflow/dflow.py", line 302, in handle_exec_update
+    res = self._unwrap_remote_exception_wrapper(future)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vhayot/spack/var/spack/environments/mochi/.spack-env/view/lib/python3.11/site-packages/parsl/dataflow/dflow.py", line 570, in _unwrap_remote_exception_wrapper
+    result = future.result()
+             ^^^^^^^^^^^^^^^
+  File "/home/vhayot/spack/var/spack/environments/mochi/.spack-env/._view/mqqgoppvczvz5n73nj3tj3aecze2kzdo/lib/python3.11/concurrent/futures/_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/vhayot/spack/var/spack/environments/mochi/.spack-env/._view/mqqgoppvczvz5n73nj3tj3aecze2kzdo/lib/python3.11/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+parsl.executors.errors.BadStateException: Executor Expanse failed due to: Error 1:
+	Job is marked as MISSING since the workers failed to register to the executor. Check the stdout/stderr logs in the submit_scripts directory for more debug information
+

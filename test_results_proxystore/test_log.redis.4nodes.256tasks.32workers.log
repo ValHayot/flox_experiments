@@ -1,0 +1,107 @@
+Starting test with workers=128
+Launched task.. waiting
+Result : uname_result(system='Linux', node='exp-9-17', release='4.18.0-477.15.1.el8_8.x86_64', version='#1 SMP Wed Jun 28 15:04:18 UTC 2023', machine='x86_64')
+[num_workers=128][task_count=256][sleep_dur=0][input_data=0][output_data=0]Launched tasks in 0.134s
+[num_workers=128][task_count=256][sleep_dur=0][input_data=0][output_data=0]Finished noop tasks in 0.195s
+[num_workers=128][task_count=256][sleep_dur=0][input_data=0][output_data=0]Throughput  1315.209 Tasks/s
+[num_workers=128][task_count=256][sleep_dur=1][input_data=0][output_data=0]Launched tasks in 0.095s
+[num_workers=128][task_count=256][sleep_dur=1][input_data=0][output_data=0]Finished noop tasks in 4.042s
+[num_workers=128][task_count=256][sleep_dur=1][input_data=0][output_data=0]Throughput  63.338 Tasks/s
+[num_workers=128][task_count=256][sleep_dur=0][input_data=4][output_data=4]Launched tasks in 3.098s
+[num_workers=128][task_count=256][sleep_dur=0][input_data=4][output_data=4]Finished noop tasks in 3.533s
+[num_workers=128][task_count=256][sleep_dur=0][input_data=4][output_data=4]Throughput  72.462 Tasks/s
+[num_workers=128][task_count=256][sleep_dur=1][input_data=4][output_data=4]Launched tasks in 2.969s
+[num_workers=128][task_count=256][sleep_dur=1][input_data=4][output_data=4]Finished noop tasks in 3.998s
+[num_workers=128][task_count=256][sleep_dur=1][input_data=4][output_data=4]Throughput  64.037 Tasks/s
+Traceback (most recent call last):
+  File "/home/vhayot/spack/var/spack/environments/mochi/.spack-env/view/lib/python3.11/site-packages/lazy_object_proxy/slots.py", line 97, in __wrapped__
+    return __getattr__(self, '__target__')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Proxy' object has no attribute '__target__'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/vhayot/spack/var/spack/environments/mochi/.spack-env/view/lib/python3.11/site-packages/redis/connection.py", line 500, in read_response
+    response = self._parser.read_response(disable_decoding=disable_decoding)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vhayot/spack/var/spack/environments/mochi/.spack-env/view/lib/python3.11/site-packages/redis/_parsers/resp2.py", line 15, in read_response
+    result = self._read_response(disable_decoding=disable_decoding)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vhayot/spack/var/spack/environments/mochi/.spack-env/view/lib/python3.11/site-packages/redis/_parsers/resp2.py", line 25, in _read_response
+    raw = self._buffer.readline()
+          ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vhayot/spack/var/spack/environments/mochi/.spack-env/view/lib/python3.11/site-packages/redis/_parsers/socket.py", line 115, in readline
+    self._read_from_socket()
+  File "/home/vhayot/spack/var/spack/environments/mochi/.spack-env/view/lib/python3.11/site-packages/redis/_parsers/socket.py", line 65, in _read_from_socket
+    data = self._sock.recv(socket_read_size)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [Errno 104] Connection reset by peer
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/vhayot/flox_experiments/test.py", line 125, in <module>
+    test_sequence(num_workers=int(args.nodes) * int(args.workers_per_node),
+  File "/home/vhayot/flox_experiments/test.py", line 65, in test_sequence
+    [future.result() for future in futures]
+  File "/home/vhayot/flox_experiments/test.py", line 65, in <listcomp>
+    [future.result() for future in futures]
+     ^^^^^^^^^^^^^^^
+  File "/home/vhayot/spack/var/spack/environments/mochi/.spack-env/._view/mqqgoppvczvz5n73nj3tj3aecze2kzdo/lib/python3.11/concurrent/futures/_base.py", line 456, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/vhayot/spack/var/spack/environments/mochi/.spack-env/._view/mqqgoppvczvz5n73nj3tj3aecze2kzdo/lib/python3.11/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/home/vhayot/spack/var/spack/environments/mochi/.spack-env/view/lib/python3.11/site-packages/parsl/dataflow/dflow.py", line 302, in handle_exec_update
+    res = self._unwrap_remote_exception_wrapper(future)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vhayot/spack/var/spack/environments/mochi/.spack-env/view/lib/python3.11/site-packages/parsl/dataflow/dflow.py", line 571, in _unwrap_remote_exception_wrapper
+    if isinstance(result, RemoteExceptionWrapper):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vhayot/spack/var/spack/environments/mochi/.spack-env/view/lib/python3.11/site-packages/lazy_object_proxy/slots.py", line 125, in __class__
+    return self.__wrapped__.__class__
+           ^^^^^^^^^^^^^^^^
+  File "/home/vhayot/spack/var/spack/environments/mochi/.spack-env/view/lib/python3.11/site-packages/lazy_object_proxy/slots.py", line 103, in __wrapped__
+    target = factory()
+             ^^^^^^^^^
+  File "/home/vhayot/spack/var/spack/environments/mochi/.spack-env/view/lib/python3.11/site-packages/proxystore/store/factory.py", line 79, in __call__
+    obj = self.resolve()
+          ^^^^^^^^^^^^^^
+  File "/home/vhayot/spack/var/spack/environments/mochi/.spack-env/view/lib/python3.11/site-packages/proxystore/store/factory.py", line 119, in resolve
+    obj = store.get(
+          ^^^^^^^^^^
+  File "/home/vhayot/spack/var/spack/environments/mochi/.spack-env/view/lib/python3.11/site-packages/proxystore/store/base.py", line 399, in get
+    value = self.connector.get(key)
+            ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vhayot/spack/var/spack/environments/mochi/.spack-env/view/lib/python3.11/site-packages/proxystore/connectors/redis.py", line 131, in get
+    return self._redis_client.get(key.redis_key)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vhayot/spack/var/spack/environments/mochi/.spack-env/view/lib/python3.11/site-packages/redis/commands/core.py", line 1829, in get
+    return self.execute_command("GET", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vhayot/spack/var/spack/environments/mochi/.spack-env/view/lib/python3.11/site-packages/redis/client.py", line 536, in execute_command
+    return conn.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vhayot/spack/var/spack/environments/mochi/.spack-env/view/lib/python3.11/site-packages/redis/retry.py", line 49, in call_with_retry
+    fail(error)
+  File "/home/vhayot/spack/var/spack/environments/mochi/.spack-env/view/lib/python3.11/site-packages/redis/client.py", line 540, in <lambda>
+    lambda error: self._disconnect_raise(conn, error),
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vhayot/spack/var/spack/environments/mochi/.spack-env/view/lib/python3.11/site-packages/redis/client.py", line 526, in _disconnect_raise
+    raise error
+  File "/home/vhayot/spack/var/spack/environments/mochi/.spack-env/view/lib/python3.11/site-packages/redis/retry.py", line 46, in call_with_retry
+    return do()
+           ^^^^
+  File "/home/vhayot/spack/var/spack/environments/mochi/.spack-env/view/lib/python3.11/site-packages/redis/client.py", line 537, in <lambda>
+    lambda: self._send_command_parse_response(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vhayot/spack/var/spack/environments/mochi/.spack-env/view/lib/python3.11/site-packages/redis/client.py", line 513, in _send_command_parse_response
+    return self.parse_response(conn, command_name, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vhayot/spack/var/spack/environments/mochi/.spack-env/view/lib/python3.11/site-packages/redis/client.py", line 553, in parse_response
+    response = connection.read_response()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vhayot/spack/var/spack/environments/mochi/.spack-env/view/lib/python3.11/site-packages/redis/connection.py", line 508, in read_response
+    raise ConnectionError(
+redis.exceptions.ConnectionError: Error while reading from 10.22.11.20:6379 : (104, 'Connection reset by peer')

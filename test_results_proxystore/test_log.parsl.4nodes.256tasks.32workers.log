@@ -1,0 +1,54 @@
+Starting test with workers=128
+Launched task.. waiting
+Result : uname_result(system='Linux', node='exp-5-44', release='4.18.0-477.15.1.el8_8.x86_64', version='#1 SMP Wed Jun 28 15:04:18 UTC 2023', machine='x86_64')
+Traceback (most recent call last):
+  File "/home/vhayot/flox_experiments/test.py", line 125, in <module>
+    test_sequence(num_workers=int(args.nodes) * int(args.workers_per_node),
+  File "/home/vhayot/flox_experiments/test.py", line 65, in test_sequence
+    [future.result() for future in futures]
+  File "/home/vhayot/flox_experiments/test.py", line 65, in <listcomp>
+    [future.result() for future in futures]
+     ^^^^^^^^^^^^^^^
+  File "/home/vhayot/spack/var/spack/environments/mochi/.spack-env/._view/mqqgoppvczvz5n73nj3tj3aecze2kzdo/lib/python3.11/concurrent/futures/_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/vhayot/spack/var/spack/environments/mochi/.spack-env/._view/mqqgoppvczvz5n73nj3tj3aecze2kzdo/lib/python3.11/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/home/vhayot/spack/var/spack/environments/mochi/.spack-env/view/lib/python3.11/site-packages/parsl/dataflow/dflow.py", line 302, in handle_exec_update
+    res = self._unwrap_remote_exception_wrapper(future)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vhayot/spack/var/spack/environments/mochi/.spack-env/view/lib/python3.11/site-packages/parsl/dataflow/dflow.py", line 572, in _unwrap_remote_exception_wrapper
+    result.reraise()
+  File "/home/vhayot/spack/var/spack/environments/mochi/.spack-env/view/lib/python3.11/site-packages/parsl/app/errors.py", line 118, in reraise
+    raise v
+  File "/home/vhayot/spack/var/spack/environments/mochi/.spack-env/view/lib/python3.11/site-packages/parsl/app/errors.py", line 141, in wrapper
+    return func(*args, **kwargs)
+^^^^^^^^^^^^^^^
+  File "/home/vhayot/flox_experiments/test.py", line 38, in sleeper
+    store = Store.from_config(config)
+      ^^^^^^^^^^^^^^^^^
+  File "/home/vhayot/spack/var/spack/environments/mochi/.spack-env/view/lib/python3.11/site-packages/proxystore/store/base.py", line 207, in from_config
+    config = config.copy()  # Avoid messing with callers version
+  ^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'copy'
+Starting test with workers=128
+Launched task.. waiting
+Result : uname_result(system='Linux', node='exp-2-12', release='4.18.0-477.15.1.el8_8.x86_64', version='#1 SMP Wed Jun 28 15:04:18 UTC 2023', machine='x86_64')
+[num_workers=128][task_count=256][sleep_dur=0][input_data=0][output_data=0]Launched tasks in 0.112s
+[num_workers=128][task_count=256][sleep_dur=0][input_data=0][output_data=0]Finished noop tasks in 0.165s
+[num_workers=128][task_count=256][sleep_dur=0][input_data=0][output_data=0]Throughput  1549.930 Tasks/s
+[num_workers=128][task_count=256][sleep_dur=1][input_data=0][output_data=0]Launched tasks in 0.084s
+[num_workers=128][task_count=256][sleep_dur=1][input_data=0][output_data=0]Finished noop tasks in 4.106s
+[num_workers=128][task_count=256][sleep_dur=1][input_data=0][output_data=0]Throughput  62.345 Tasks/s
+[num_workers=128][task_count=256][sleep_dur=0][input_data=4][output_data=4]Launched tasks in 5.307s
+[num_workers=128][task_count=256][sleep_dur=0][input_data=4][output_data=4]Finished noop tasks in 5.335s
+[num_workers=128][task_count=256][sleep_dur=0][input_data=4][output_data=4]Throughput  47.988 Tasks/s
+[num_workers=128][task_count=256][sleep_dur=1][input_data=4][output_data=4]Launched tasks in 5.192s
+[num_workers=128][task_count=256][sleep_dur=1][input_data=4][output_data=4]Finished noop tasks in 6.232s
+[num_workers=128][task_count=256][sleep_dur=1][input_data=4][output_data=4]Throughput  41.077 Tasks/s
+[num_workers=128][task_count=256][sleep_dur=0][input_data=8][output_data=8]Launched tasks in 11.044s
+[num_workers=128][task_count=256][sleep_dur=0][input_data=8][output_data=8]Finished noop tasks in 11.110s
+[num_workers=128][task_count=256][sleep_dur=0][input_data=8][output_data=8]Throughput  23.043 Tasks/s
+[num_workers=128][task_count=256][sleep_dur=1][input_data=8][output_data=8]Launched tasks in 11.128s
+[num_workers=128][task_count=256][sleep_dur=1][input_data=8][output_data=8]Finished noop tasks in 12.189s
+[num_workers=128][task_count=256][sleep_dur=1][input_data=8][output_data=8]Throughput  21.002 Tasks/s
