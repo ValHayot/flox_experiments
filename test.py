@@ -59,7 +59,7 @@ def test_sequence(num_workers, task_count=1, sleep_dur=0, input_data=0, output_d
 
     if store != 'parsl':
         if store == 'redis':
-            connector = RedisConnector(hostname='10.22.11.20', port=6379)
+            connector = RedisConnector(hostname='10.22.11.19', port=6379)
         elif store == 'file':
             connector = FileConnector(store_dir='/home/vhayot/flox_experiments/data')
         else:
@@ -127,7 +127,7 @@ if __name__ == "__main__":
     else:
         count_range = [int(args.count)]
         
-    for data_volume in [8, 16, 32]:
+    for data_volume in [45, 62, 84, 98, 171, 231]:
         for task_count in count_range:
             for sleep_dur in [0, 1]:
                 test_sequence(num_workers=int(args.nodes) * int(args.workers_per_node),
