@@ -6,11 +6,11 @@ do
     tasks=$((node * 32 * 2))
     LOG="test_log.parsl.${node}nodes.${tasks}tasks.32workers.log"
     echo "Starting test with workers=$((node * 32))" &>> $LOG
-    python3 test.py --workers_per_node=1 --nodes=$node --count=$tasks -i polaris &>> $LOG
+    python3 test.py --workers_per_node=32 --nodes=$node --count=$tasks -i local-polaris &>> $LOG
 
     LOG="test_log.redis.${node}nodes.${tasks}tasks.32workers.log"
     echo "Starting test with workers=$((node * 32))" &>> $LOG
-    python3 test.py --workers_per_node=32 --nodes=$node --count=$tasks --store redis -i polaris -r 10.201.0.59  &>> $LOG
+    python3 test.py --workers_per_node=32 --nodes=$node --count=$tasks --store redis -i local-polaris -r 10.201.2.19  &>> $LOG
 
     #LOG="test_log.file.${node}nodes.${tasks}tasks.32workers.log"
     #echo "Starting test with workers=$((node * 32))" &>> $LOG
