@@ -4,15 +4,19 @@ import time
 
 from parsl.config import Config
 from parsl.launchers import SrunLauncher
+from parsl.launchers import MpiExecLauncher
+from parsl.providers import LocalProvider
+from parsl.providers import PBSProProvider
 from parsl.providers import SlurmProvider
 from parsl.executors import HighThroughputExecutor
+from parsl.addresses import address_by_interface
 from parsl import python_app
 
 from proxystore.store import register_store
 from proxystore.store import Store
 from proxystore.connectors.file import FileConnector
 from proxystore.connectors.redis import RedisConnector
-from proxystore_ex.connectors.dim.margo import MargoConnector
+#from proxystore_ex.connectors.dim.margo import MargoConnector
 
 @python_app
 def platform():
@@ -48,7 +52,7 @@ def sleeper(config, sleep_dur=0, input_data="", output_data_volume:int=1):
     return output_string
 
 
-def test_sequence(num_workers, task_count=1, sleep_dur=0, input_data=0, output_data=0, store='parsl'):
+def test_sequence(num_workers, task_count=1, sleep_dur=0, input_data=0, output_data=0, store='parsl', ip='127.0.0.1'):
     prefix = f"[{num_workers=}][{task_count=}][{sleep_dur=}][{input_data=}][{output_data=}]"
 
     start = time.time()
@@ -59,11 +63,11 @@ def test_sequence(num_workers, task_count=1, sleep_dur=0, input_data=0, output_d
 
     if store != 'parsl':
         if store == 'redis':
-            connector = RedisConnector(hostname='10.22.11.19', port=6379)
+            connector = RedisConnector(hostname=ip, port=6379)
         elif store == 'file':
             connector = FileConnector(store_dir='/home/vhayot/flox_experiments/data')
-        else:
-            connector = MargoConnector(port=7000, protocol='ofi+verbs')
+        #else:
+        #    connector = MargoConnector(port=7000, protocol='ofi+verbs')
         store = Store('flox-store', connector)  
         config = store.config()
         input_string = store.proxy(input_string)
@@ -88,36 +92,91 @@ if __name__ == "__main__":
     parser.add_argument("-c", "--count", default='',
                         help="Number of tasks to launch")
     parser.add_argument("-s", "--store", default='parsl', choices=['parsl', 'redis', 'file', 'margo'])
+    parser.add_argument("-i", "--infrastructure", default='local-ex', choices=['local-expanse', 'local-polaris', 'polaris', 'expanse'])
+    parser.add_argument("-r", "--redis-ip", default="127.0.0.1", help="host ip for redis")
 
     args = parser.parse_args()
 
-    config = Config(
-    executors=[
-        HighThroughputExecutor(
-            label="Expanse",
-            # worker_logdir_root='YOUR_LOGDIR_ON_COMET',
-            max_workers=int(args.workers_per_node),
-            prefetch_capacity=100,
-            provider=SlurmProvider(
-                'compute',
-                # 'debug',
-                # account="anl113",
-                account="chi150",
-                launcher=SrunLauncher(),
-                # string to prepend to #SBATCH blocks in the submit
-                # script to the scheduler
-                scheduler_options='',
-                # Command to be run before starting a worker, such as:
-                # 'module load Anaconda; source activate parsl_env'.
-                worker_init='source ~/spack/share/spack/setup-env.sh; spack env activate mochi -p',
-                walltime='00:30:00',
-                init_blocks=1,
-                max_blocks=1,
-                nodes_per_block=int(args.nodes),
-            ),
+    
+    if args.infrastructure == "local-expanse":
+        config = Config(
+        executors=[
+            HighThroughputExecutor(
+                label="Expanse",
+                max_workers=int(args.workers_per_node),
+                prefetch_capacity=100,
+                provider=LocalProvider(),
+            )
+        ]
         )
-    ]
-    )
+
+    elif args.infrastructure == "local-polaris":
+        config = Config(
+        executors=[
+            HighThroughputExecutor(
+                label="Polaris",
+                max_workers=int(args.workers_per_node),
+                prefetch_capacity=100,
+                provider=LocalProvider(),
+            )
+        ]
+        )
+    elif args.infrastructure == "expanse":
+        config = Config(
+        executors=[
+            HighThroughputExecutor(
+                label="Expanse",
+                # worker_logdir_root='YOUR_LOGDIR_ON_COMET',
+                max_workers=int(args.workers_per_node),
+                prefetch_capacity=100,
+                provider=SlurmProvider(
+                    'compute',
+                    # 'debug',
+                    # account="anl113",
+                    account="chi150",
+                    launcher=SrunLauncher(),
+                    # string to prepend to #SBATCH blocks in the submit
+                    # script to the scheduler
+                    scheduler_options='',
+                    # Command to be run before starting a worker, such as:
+                    # 'module load Anaconda; source activate parsl_env'.
+                    worker_init='source ~/spack/share/spack/setup-env.sh; spack env activate mochi -p',
+                    walltime='00:30:00',
+                    init_blocks=1,
+                    max_blocks=1,
+                    nodes_per_block=int(args.nodes),
+                ),
+            )
+        ]
+        )
+    else:
+        config = Config(
+        executors=[
+            HighThroughputExecutor(
+                label="Polaris",
+                # worker_logdir_root='YOUR_LOGDIR_ON_COMET',
+                max_workers=int(args.workers_per_node),
+                prefetch_capacity=100,
+                address=address_by_interface("bond0"),
+                cpu_affinity="block-reverse",
+                provider=PBSProProvider(
+                    launcher=MpiExecLauncher(bind_cmd="--cpu-bind", overrides="--depth=64 --ppn 1"),
+                    account='SuperBERT',
+                    queue='debug',
+                    # PBS directives (header lines): for array jobs pass '-J' option
+                    scheduler_options="#PBS -l filesystems=home:eagle:grand",
+                    # Command to be run before starting a worker, such as:
+                    worker_init="module load conda; conda activate /home/vhayot/.conda/envs/flox",
+                    # number of compute nodes allocated for each block
+                    nodes_per_block=int(args.nodes),
+                    init_blocks=1,
+                    min_blocks=0,
+                    max_blocks=1, # Can increase more to have more parallel jobs
+                    walltime='00:30:00'
+                ),
+            )
+        ]
+        )
 
     parsl.load(config)
     priming()
@@ -135,4 +194,5 @@ if __name__ == "__main__":
                               sleep_dur=sleep_dur,
                               input_data=data_volume,
                               output_data=data_volume,
-                              store=args.store)
+                              store=args.store,
+                              ip=args.redis_ip)
